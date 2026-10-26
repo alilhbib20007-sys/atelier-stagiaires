@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des stagiaires</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <span class="logo">Gestion des stagiaires</span>
+            <ul>
+                <li><a href="/">Inscription</a></li>
+                <li><a href="/liste.html" class="active">Liste des stagiaires</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Liste des stagiaires</h1>
+        <p class="intro">Données lues depuis MySQL (Aiven), photos chargées depuis Cloudinary.</p>
+
+        <p id="compteur" class="compteur"></p>
+        <div id="grille" class="grille"></div>
+        <p id="etat" class="etat">Chargement...</p>
+    </main>
+
+    <script>
+        const grille = document.getElementById('grille');
+        const etat = document.getElementById('etat');
+        const compteur = document.getElementById('compteur');
+
+        function formaterDate(valeur) {
+            const date = new Date(String(valeur).replace(' ', 'T') + 'Z');
+            return isNaN(date) ? valeur : date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+        }
+
+        function carte(stagiaire) {
+            const article = document.createElement('article');
+            article.className = 'stagiaire';
+
+            const image = document.createElement('img');
+            image.src = stagiaire.photo;
+            image.alt = 'Photo de ' + stagiaire.prenom + ' ' + stagiaire.nom;
+            image.loading = 'lazy';
+
+            const titre = document.createElement('h2');
+            titre.textContent = stagiaire.prenom + ' ' + stagiaire.nom;
+
+            const ville = document.createElement('p');
+            ville.className = 'ville';
+            ville.textContent = stagiaire.ville;
+
+            const date = document.createElement('p');
+            date.className = 'date';
+            date.textContent = 'Inscrit le ' + formaterDate(stagiaire.date_inscription);
+
+            article.append(image, titre, ville, date);
+            return article;
+        }
+
+        async function charger() {
+            try {
+                const reponse = await fetch('/api/liste.php');
+                const resultat = await reponse.json();
+
+                if (!reponse.ok || !resultat.succes) {
+                    etat.textContent = resultat.message || 'Erreur lors du chargement.';
+                    return;
+                }
+
+                if (resultat.total === 0) {
+                    etat.innerHTML = 'Aucun stagiaire inscrit pour le moment. <a href="/">Inscrire le premier</a>';
+                    return;
+                }
+
+                etat.style.display = 'none';
+                compteur.textContent = resultat.total + ' stagiaire(s) inscrit(s)';
+                resultat.stagiaires.forEach(s => grille.appendChild(carte(s)));
+            } catch (erreur) {
+                etat.textContent = 'Impossible de contacter le serveur.';
+            }
+        }
+
+        charger();
+    </script>
+</body>
+</html>

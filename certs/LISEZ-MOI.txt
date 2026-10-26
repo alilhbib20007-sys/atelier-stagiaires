@@ -1,0 +1,7 @@
+Placez ici le certificat CA de votre service MySQL Aiven, sous le nom : ca.pem
+
+Aiven Console > votre service MySQL > Overview > Connection information
+> CA certificate > Download (ou "Show" puis copier le contenu dans ca.pem).
+
+Ce certificat est public (ce n'est pas un mot de passe) : il peut être poussé sur GitHub.
+Les identifiants restent dans les variables d'environnement de Vercel.
