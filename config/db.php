@@ -6,11 +6,11 @@
  */
 function getDatabase(): PDO
 {
-    $host = getenv('DB_HOST');
-    $port = getenv('DB_PORT');
-    $name = getenv('DB_NAME');
-    $user = getenv('DB_USER');
-    $password = getenv('DB_PASSWORD');
+    $host = env('DB_HOST');
+    $port = env('DB_PORT');
+    $name = env('DB_NAME');
+    $user = env('DB_USER');
+    $password = env('DB_PASSWORD');
 
     if (!$host || !$port || !$name || !$user || $password === false) {
         throw new ErreurConfiguration("Variables d'environnement DB_* manquantes.");

@@ -1,5 +1,24 @@
 <?php
 
+/**
+ * Lit une variable d'environnement.
+ * Le runtime vercel-php ne transmet pas toujours les variables à getenv() :
+ * on cherche donc aussi dans $_ENV et $_SERVER.
+ */
+function env(string $nom)
+{
+    $valeur = getenv($nom);
+    if ($valeur !== false && $valeur !== '') {
+        return $valeur;
+    }
+    foreach ([$_ENV, $_SERVER] as $source) {
+        if (isset($source[$nom]) && $source[$nom] !== '') {
+            return $source[$nom];
+        }
+    }
+    return false;
+}
+
 /** Envoie une réponse JSON et arrête le script. */
 function repondre(int $status, array $data): void
 {

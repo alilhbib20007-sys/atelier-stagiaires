@@ -49,7 +49,7 @@ if ($erreurs) {
 
 try {
     // 3. Envoyer la photo à Cloudinary (CLOUDINARY_URL = cloudinary://API_KEY:API_SECRET@CLOUD_NAME)
-    $cloudinaryUrl = getenv('CLOUDINARY_URL');
+    $cloudinaryUrl = env('CLOUDINARY_URL');
     if (!$cloudinaryUrl) {
         throw new ErreurConfiguration("Variable d'environnement CLOUDINARY_URL manquante.");
     }
