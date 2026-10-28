@@ -38,5 +38,14 @@ function getDatabase(): PDO
         $sslVerify => true,
     ];
 
-    return new PDO($dsn, $user, $password, $options);
+    $pdo = new PDO($dsn, $user, $password, $options);
+
+    // Crée la table au premier appel si elle n'existe pas encore (même schéma que sql/schema.sql)
+    static $tableVerifiee = false;
+    if (!$tableVerifiee) {
+        $pdo->exec(file_get_contents(dirname(__DIR__) . '/sql/schema.sql'));
+        $tableVerifiee = true;
+    }
+
+    return $pdo;
 }
