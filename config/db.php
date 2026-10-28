@@ -13,7 +13,8 @@ function getDatabase(): PDO
     $password = env('DB_PASSWORD');
 
     if (!$host || !$port || !$name || !$user || $password === false) {
-        throw new ErreurConfiguration("Variables d'environnement DB_* manquantes.");
+        throw new ErreurConfiguration("Variables d'environnement DB_* manquantes. Diagnostic : "
+            . diagnostic_env(['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'CLOUDINARY_URL']));
     }
 
     $caPath = dirname(__DIR__) . '/certs/ca.pem';
