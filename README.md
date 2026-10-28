@@ -3,6 +3,8 @@
 **Atelier 6 : prérequis du Sprint 3 (Quick Annonces)** · PHP, MySQL Aiven, Cloudinary et Vercel
 Ali EL Habib · OFPPT Tanger · Développement Digital
 
+**Démo en ligne :** https://atelier-stagiaires-jade.vercel.app
+
 Application de gestion des stagiaires :
 
 - **Page 1 · Inscription** (`index.html`) : nom, prénom, ville et photo. Le serveur envoie la photo à Cloudinary, puis enregistre le stagiaire dans MySQL.
